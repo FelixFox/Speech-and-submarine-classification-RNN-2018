@@ -1,0 +1,70 @@
+{% load staticfiles %}
+<html>
+
+<head>
+    <title>Recognizer</title>
+    <link href="{% static 'css/material-icons.css' %}" type="text/css" rel="stylesheet">
+    <!--Import materialize.css-->
+    <link type="text/css" rel="stylesheet" href="{% static 'css/materialize.min.css' %}" media="screen,projection" />
+    <link type="text/css" rel="stylesheet" href="{% static 'css/animation.css' %}" />
+
+    <script src="{% static 'js/plotly-latest.min.js' %}"></script>
+    <script src="{% static 'js/jquery-3.3.1.min.js' %}"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <!-- TODO: Move to .css file -->
+    <style>
+        .brand-logo {
+            position: relative !important;
+            margin-right: 10px;
+            margin-left: 10px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="page-header">
+        <nav>
+            <div class="nav-wrapper">
+                <a href="/" class="left brand-logo">Recognizer</a>
+                <ul id="nav-mobile" class="left hide-on-med-and-down">
+                    {% if user.is_authenticated %}
+                    <li>
+                        <a href="/recognizer/history">History</a>
+                    </li>
+                    {% endif %}
+                </ul>
+                <ul id="nav-mobile-right" class="right hide-on-med-and-down">
+                    {% if user.is_authenticated %}
+                    <li>
+                        <a href="/accounts/logout">Logout</a>
+                    </li>
+                    {% else %}
+                    <li>
+                        <a href="/accounts/login">Login</a>
+                    </li>
+                    <li>
+                        <a href="/accounts/signup">Register</a>
+                    </li>
+                    {% endif %}
+
+                </ul>
+            </div>
+        </nav>
+    </div>
+
+    <div class="content container">
+        <div class="row">
+            <div class="col-md-8">
+                {% block content %} {% endblock %}
+            </div>
+        </div>
+    </div>
+
+    <script type="text/javascript" src="{% static 'js/materialize.min.js' %}"></script>
+
+    <script src="{%static 'js/html2canvas.min.js' %}"></script>
+    <script src="{%static 'js/jspdf.debug.js' %}"></script>
+</body>
+
+</html>

@@ -1,0 +1,101 @@
+{% extends "layout.html" %} {% load staticfiles%} {% block content %} 
+<form name="sound" id="file-form" method="post" enctype="multipart/form-data" style="margin-top: 20px">
+    {% csrf_token %}
+    <div class="row">
+        <h5>Step 1: select file to recognize</h5>
+        <label>Select audio file</label>
+        <div class="file-field input-field">
+            <div class="btn">
+                <span>Browse</span>
+                <input type="file" name="sound" accept=".wav" />
+            </div>
+            <div class="file-path-wrapper">
+                <input id="file-upload-holder" name="soundholder" class="file-path validate" type="text" placeholder="Upload file" />
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div id="progress-bar" class="progress" style="display: none;">
+            <div class="indeterminate"></div>
+        </div>
+    </div>
+    <div id="recognize-result" class="row" style="display: none">
+        <h5>Step 2: Recognized stats</h5>
+
+        <div class="row">
+
+            <div class="card" style="margin-top: 60px">
+                <div class="card-content">
+                    <span class="card-title">Feature visualization: MFC Coeficients</span>
+                    <p>The graph located below shows a common way to display speech signals, the voice spectrogram, or voiceprint.
+                        The audio signal is broken into short segments, say 2 to 40 milliseconds, and the FFT used to find
+                        the frequency spectrum of each segment. These spectra are placed side-by-side, and converted into
+                        an image (low amplitude becomes light, and high amplitude becomes dark). This provides a graphical
+                        way of observing how the frequency content of speech changes with time. A typical spectrogram uses
+                        a linear frequency scaling, so each frequency bin is spaced the equal number of Hertz apart. The
+                        mel-frequency scale on the other hand, is a quasi-logarithmic spacing roughly resembling the resolution
+                        of the human auditory system. The Mel scale relates perceived frequency, or pitch, of a pure tone
+                        to its actual measured frequency. Humans are much better at discerning small changes in pitch at
+                        low frequencies than they are at high frequencies. Incorporating this scale makes our features match
+                        more closely what humans hear.</p>
+                </div>
+                <div class="card-action center">
+                    <a target="_blank" href="https://sites.google.com/site/autosignlan/algorithms-used/mfcc">Link for more information</a>
+                </div>
+            </div>
+
+        </div>
+        <div id="plot"></div>
+        <div class="row">
+            <div class="card" style="margin-top: 80px">
+                <div class="card-content">
+                    <span class="card-title">Prediction statistics: </span>
+                    <p>The table located below contains the main information of the results.
+                        <ul style="list-style-type:circle">
+                            <li>
+                                <b>Neural network name: </b> the neural network which was used for recognition</li>
+                            <li>
+                                <b>Features shape:</b> the shape of feature matrix wich was used as input parameters to neural
+                                network </li>
+                            <li>
+                                <b>Recognized class:</b> the class which is associated with given signal according to neural
+                                networks result</li>
+                            <li>
+                                <b>Score:</b> the probability that given signal belongs to recognized class</li>
+                            <li>
+                                <b>Sample rate:</b> shows the sample rate of given signal in Hz</li>
+                            <li>
+                                <b>Recognition duration:</b> duration of recognition process in miliseconds</li>
+                        </ul>
+
+                    </p>
+                </div>
+
+            </div>
+
+        </div>
+        <ul id="recognize-info" class="collection">
+        </ul>
+        <div class="row">
+            <div class="card" style="margin-top: 60px">
+                <div class="card-content">
+                    <span class="card-title">Prediction scores</span>
+                    <p>The graph located below is a visual representation of distribution of probabilities that given signal
+                        belongs to a certain class</p>
+                </div>
+
+            </div>
+
+        </div>
+        <div id="bar-scores"></div>
+
+        <div class="row">
+            <h5>Step 3. Export results</h5>
+            <button class="btn waves-effect waves-light" type="button" onclick="saveToPdf();">Save</button>
+        </div>
+    </div>
+</form>
+{% if recognized %} {% endif %}
+<!-- {{ form }} -->
+<script>window.username = "{{ user.username }}"; </script>
+<script src="{% static 'js/recognizer/recognize_speech.js' %}"></script> {% endblock %}

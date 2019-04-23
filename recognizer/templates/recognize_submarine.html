@@ -1,0 +1,90 @@
+{% extends "layout.html" %} {% load staticfiles%} {% block content %}
+<form name="sound" id="file-form" method="post" enctype="multipart/form-data" style="margin-top: 20px">
+    {% csrf_token %}
+    <div class="row">
+        <h5>Step 1: select file to recognize</h5>
+        <label>Select audio file</label>
+        <div class="file-field input-field">
+            <div class="btn">
+                <span>Browse</span>
+                <input type="file" name="sound" accept=".wav" />
+            </div>
+            <div class="file-path-wrapper">
+                <input id="file-upload-holder" name="soundholder" class="file-path validate" type="text" placeholder="Upload file" />
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div id="progress-bar" class="progress" style="display: none;">
+            <div class="indeterminate"></div>
+        </div>
+    </div>
+    <div id="recognize-result" class="row" style="display: none">
+        <h5 style="margin-top: 60px">Step 2: Recognized stats</h5>
+        <div class="row">
+            <div class="card" style="margin-top: 60px">
+                <div class="card-content">
+                    <span class="card-title">Feature visualization: Fast fourier transform (FFT)</span>
+                    <p>The graph located below is a visual representation of parameters used in audio signal recognition. These
+                        parameters were obtained by using Fast Fourier Transform algorithm. FFT is a basic technique for
+                        digital signal processing applicable for spectrum analysis. It converts a signal into individual
+                        spectral components and thereby provides frequency information about the signal. Obtained components
+                        are single sinusoidal oscillations at distinct frequencies each with their own amplitude and phase.
+                        So a signal is sampled over a period of time and divided into its frequency components. FFTs are
+                        used for fault analysis, quality control, and condition monitoring of machines or systems.</p>
+                </div>
+                <div class="card-action center">
+                    <a target="_blank" href="https://www.nti-audio.com/en/support/know-how/fast-fourier-transform-fft">Link for more information</a>
+                </div>
+            </div>
+
+        </div>
+        <div id="plot"></div>
+        <div class="row">
+                <div class="card" style="margin-top: 80px">
+                    <div class="card-content">
+                        <span class="card-title">Prediction statistics: </span>
+                        <p>The table located below contains the main information of the results.
+                            <ul  style="list-style-type:circle">
+                                <li><b>Neural network name: </b> the neural network which was used for recognition</li>
+                                <li><b>Features shape:</b> the shape of feature matrix wich was used as input parameters to neural network </li>
+                                <li><b>Recognized class:</b> the class which is associated with given signal according to neural networks result</li>
+                                <li><b>Score:</b> the probability that given signal belongs to recognized class</li>
+                                <li><b>Sample rate:</b> shows the sample rate of given signal in Hz</li>
+                                <li><b>Recognition duration:</b> duration of recognition process in miliseconds</li>
+                            </ul>
+    
+                        </p>
+                    </div>
+    
+                </div>
+        <ul id="recognize-info" class="collection">
+        </ul>
+        
+        <div class="row">
+            <div class="card" style="margin-top: 60px">
+                <div class="card-content">
+                    <span class="card-title">Prediction scores</span>
+                    <p>The graph located below is a visual representation of distribution of probabilities that given signal
+                        belongs to a certain class</p>
+                </div>
+               
+            </div>
+
+        </div>
+        <div id="bar-scores"></div>
+        <div class="row">
+            <h5>Step 3. Export results</h5>
+            <button class="btn waves-effect waves-light btn-large" type="button" onclick="saveToPdf();">Save</button>
+        </div>
+    </div>
+    
+</form>
+{% if recognized %} {% endif %}
+<!-- {{ form }} -->
+
+<!-- TODO: Get deal with this shit!!! -->
+<script>
+    window.username="{{user.username}}"
+</script>
+<script src="{% static 'js/recognizer/recognize_submarine.js' %}"></script> {% endblock %}

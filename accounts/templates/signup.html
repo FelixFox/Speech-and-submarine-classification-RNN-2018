@@ -1,0 +1,29 @@
+{% extends 'layout.html' %} {% block title %}Sign Up{% endblock %} {% block content %}
+<h2>Sign up</h2>
+
+<form method="post">
+  {% csrf_token %}
+  <p>
+    <label for="id_username" class="">Username:</label>
+    <input type="text" name="username" maxlength="150" autofocus="" required="" id="id_username">
+    <blockquote>Required. 150 characters or fewer. Letters, digits and @/./+/-/_ only.</blockquote>
+  </p>
+  <p>
+    <label for="id_password1" class="">Password:</label>
+    <input type="password" name="password1" required="" id="id_password1">
+    <span class="helptext"></span>
+  </p>
+  <p></p>
+  <p>
+    <label for="id_password2" class="">Password confirmation:</label>
+    <input type="password" name="password2" required="" id="id_password2">
+  </p>
+  <ul>
+    <blockquote>Your password can't be too similar to your other personal information.
+      <br/> Your password must contain at least 8 characters.
+      <br/> Your password can't be a commonly used password.
+      <br/> Your password can't be entirely numeric.</blockquote>
+  </ul>
+  <button class="btn" type="submit">Sign up</button>
+</form>
+{% endblock %}
